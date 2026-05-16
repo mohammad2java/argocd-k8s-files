@@ -47,7 +47,6 @@ spec:
         app.kubernetes.io/name: server
         app.kubernetes.io/version: 0.0.1
       name: server
-      namespace: test-ns
     spec:
       containers:
       - env:
@@ -64,8 +63,8 @@ spec:
         livenessProbe:
           failureThreshold: 3
           httpGet:
-            path: /actuator/health
-            port: 8080
+            path: /
+            port: 80
             scheme: HTTP
           initialDelaySeconds: 180
           successThreshold: 1
@@ -73,8 +72,8 @@ spec:
         readinessProbe:
           failureThreshold: 3
           httpGet:
-            path: /actuator/health
-            port: 8080
+            path: /
+            port: 80
             scheme: HTTP
           initialDelaySeconds: 10
           successThreshold: 1
