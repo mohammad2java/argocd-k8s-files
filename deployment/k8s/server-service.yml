@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    jkube.eclipse.org/scm-url: https://github.com/spring-projects/spring-boot/ocs-parent/server
+    jkube.eclipse.org/scm-tag: HEAD
+    jkube.eclipse.org/git-commit: 6072867fa26c8b20b4a87756cab3888c68d2fc4b
+    jkube.eclipse.org/git-url: https://gitlab.com/ocsprojects/productengineering/ocs-services.git
+    jkube.eclipse.org/git-branch: feature/java17-dev1
+  labels:
+    app: server
+    provider: jkube
+    version: 0.0.1
+    group: com.ocs
+    app.kubernetes.io/part-of: com.ocs
+    app.kubernetes.io/managed-by: jkube
+    app.kubernetes.io/name: server
+    app.kubernetes.io/version: 0.0.1
+  name: server
+spec:
+  ports:
+  - name: http
+    nodePort: 30080
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: server
+    provider: jkube
+    group: com.ocs
+    app.kubernetes.io/name: server
+    app.kubernetes.io/part-of: com.ocs
+    app.kubernetes.io/managed-by: jkube
+  type: NodePort

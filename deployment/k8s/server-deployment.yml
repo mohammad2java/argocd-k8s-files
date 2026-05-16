@@ -1,0 +1,82 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    jkube.eclipse.org/scm-url: https://github.com/spring-projects/spring-boot/ocs-parent/server
+    jkube.eclipse.org/scm-tag: HEAD
+    jkube.eclipse.org/git-commit: 6072867fa26c8b20b4a87756cab3888c68d2fc4b
+    jkube.eclipse.org/git-url: https://gitlab.com/ocsprojects/productengineering/ocs-services.git
+    jkube.eclipse.org/git-branch: feature/java17-dev1
+  labels:
+    app: server
+    provider: jkube
+    version: 0.0.1
+    group: com.ocs
+    app.kubernetes.io/part-of: com.ocs
+    app.kubernetes.io/managed-by: jkube
+    app.kubernetes.io/name: server
+    app.kubernetes.io/version: 0.0.1
+  name: server
+spec:
+  replicas: 2
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: server
+      provider: jkube
+      group: com.ocs
+      app.kubernetes.io/name: server
+      app.kubernetes.io/part-of: com.ocs
+      app.kubernetes.io/managed-by: jkube
+  template:
+    metadata:
+      annotations:
+        jkube.eclipse.org/scm-url: https://github.com/spring-projects/spring-boot/ocs-parent/server
+        jkube.eclipse.org/scm-tag: HEAD
+        jkube.eclipse.org/git-commit: 6072867fa26c8b20b4a87756cab3888c68d2fc4b
+        jkube.eclipse.org/git-url: https://gitlab.com/ocsprojects/productengineering/ocs-services.git
+        jkube.eclipse.org/git-branch: feature/java17-dev1
+      labels:
+        app: server
+        provider: jkube
+        version: 0.0.1
+        group: com.ocs
+        app.kubernetes.io/part-of: com.ocs
+        app.kubernetes.io/managed-by: jkube
+        app.kubernetes.io/name: server
+        app.kubernetes.io/version: 0.0.1
+      name: server
+      namespace: test-ns
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: traefik/whoami:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 180
+          successThreshold: 1
+        name: traefik-server
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          successThreshold: 1
+        securityContext:
+          privileged: false
